@@ -1,0 +1,15 @@
+#lang racket
+(define nombre (list 'D 'a 'v 'i 'd '_ 'R 'a 'm 'i 'r 'e 'z))
+
+(define (ret-last name)
+  (if (eq? '_ (car name))
+      (count-last (cdr name) 1)
+      (ret-last (cdr name))))
+
+(define (count-last name pos)
+  (if (= pos 5)
+      (car name)
+      (count-last (cdr name) (+ pos 1))))
+
+
+((lambda (x) (ret-last x)) nombre)

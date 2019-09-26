@@ -1,0 +1,41 @@
+#lang racket
+(define (power-head num exp)
+  (if (= exp 1)
+      num
+      (* num (power-head num (- exp 1)))))
+
+(define (power-tails num exp)
+  1)
+
+(define (third ls)
+  (next (cdr ls) 1))
+
+(define (next ls num)
+  (if (= num 2)
+      (car ls)
+      (next (cdr ls) (+ num 1))))
+      
+(define (just-two? ls)
+  (if (null? (cdr ls))
+      #f
+      (if (null? (cdr (cdr ls)))
+          #t
+          #f)))
+
+(define (how-many-x? ls x)
+  (if (null? (car ls))
+      0
+      (if (= (car ls) x)
+          (how-many-x ((cdr ls) x 1))
+          (how-many-x ((cdr ls) x 0)))))
+
+(define (how-many-x ls x count)
+  (if (null? (car ls))
+      count
+      (if (= (car ls) x)
+          (how-many-x ((cdr ls) x count))
+          (how-many-x ((cdr ls) x count)))))
+
+(define list (cons 1(cons 2 (cons 3 (cons 4 (cons 3 empty))))))
+
+(how-many-x? list 3)

@@ -1,0 +1,32 @@
+#lang racket
+(define (max x y)
+  (if (> x y) x y))
+
+(define (leaf? tree)
+  (cond
+    ((empty? (cdr tree)) #t)
+    (else #f)))
+
+(define (biggest-value ls)
+  (move-leaves ls))
+
+(define (move-leaves tree)
+  (if (leaf? tree)
+      (car tree)
+      (move-leaves-deep (cdr tree) (car tree))))
+
+(define (move-leaves-deep  tree x)
+  (if (empty? tree)
+      0
+     (max x (max (move-leaves (car tree))
+        (move-leaves-deep (cdr tree) x)))))
+
+(define t '(8 (5(2)(7))(11 (9))))
+
+(biggest-value t)
+
+(biggest-value '(8(5(2)(7))))
+  
+(biggest-value '(8(5(2)(7))(11(9)(61))))
+
+;;(car '(8(5(2)(7))))

@@ -1,0 +1,188 @@
+#lang racket
+(define (power-head num exp)
+  (if (= exp 1)
+      num
+      (* num (power-head num (- exp 1)))))
+
+(define (power-tail num exp)
+  (power-tail-h num exp 1))
+
+(define (power-tail-h num exp res)
+  (if(= exp 0)
+     res
+     (power-tail-h num (sub1 exp) (* res num))))
+
+;(define (third ls)
+  ;(cond
+    ;[(null? ls) "false"]
+
+(define (third ls)
+  (next (cdr ls) 1))
+
+(define (next ls num)
+  (if (= num 2)
+      (car ls)
+      (next (cdr ls) (+ num 1))))
+      
+(define (just-two? ls)
+  (if (null? ls)
+      #f
+      (if (null? (cdr ls))
+          #f
+          (if (null? (cdr (cdr ls)))
+              #t
+              #f))))
+
+(define (how-many-x? ls x)
+  (if (null? (car ls))
+      0
+      (if (= (car ls) x)
+          (how-many-x (cdr ls) x 1)
+          (how-many-x (cdr ls) x 0))))
+
+(define (how-many-x ls x count)
+  (if (null? ls)
+      count
+      (if (= (car ls) x)
+          (+ count (how-many-x (cdr ls) x 1))
+          (+ count (how-many-x (cdr ls) x 0)))))
+
+(define (all-x? ls x)
+  (if (null? ls)
+      #f
+      (all-x ls x)))
+
+(define (all-x ls x)
+  (if (null? ls)
+      #t
+      (if (= (car ls) x)
+          (if (null? ls)
+              #t
+              (all-x (cdr ls) x))
+          #f)))
+
+(define (get ls x)
+  (geth ls x 1))
+
+(define (geth ls x in)
+  (if (= x in)
+      (car ls)
+      (geth (cdr ls) x (add1 in))))
+
+(define (difference l1 l2)
+  (if (null? l1)
+      #f
+      (if (null? l2)
+          #f
+          (difference-tail l1 l2 '()))))
+
+(define (difference-tail l1 l2 res)
+  (if (null? l1)
+      res
+      (if (contains (car l1) l2)
+          (difference-tail (cdr l1) l2 res)
+          (difference-tail (cdr l1) l2 (cons (car l1) res)))))
+
+(define contains member)
+
+(define (append l1 l2)
+  (if (null? l1)
+      l2
+      (append (cdr l1) (cons (car l1) l2))))
+
+(define (append1 l1 l2 res)
+  (if (null? l1)
+      (if (null? l2)
+          res
+          (append1 l1 (cdr l2) (cons (car l2) res)))
+      (append1 (cdr l1) l2 (cons (car l1) res))))
+
+
+(define (append2 l1 l2)
+  (if (null? l1)
+      (if (null? l2)
+          '()
+          (cons (car l2) (append2 l1 (cdr l2))))
+      (cons (car l1) (append2 (cdr l1) l2))))
+
+
+(define (invert ls)
+  (invh ls '()))
+
+(define (invh ls res)
+  (if (null? ls)
+      res
+      (invh (cdr ls) (cons (car ls) res))))
+
+(define (sign ls)
+  (if (null? ls)
+      #f
+      (signh ls '())))
+
+(define (signh ls res)
+  (if (null? ls)
+      res
+      (if (> (car ls) 0)
+          (signh (cdr ls) (cons 1 res))
+          (signh (cdr ls) (cons -1 res)))))
+          
+(define (negatives ls)
+  (negh ls '()))
+
+(define (negh ls res)
+  (if (null? ls)
+      (invert res)
+      (if(> (car ls) 0)
+         (negh (cdr ls) (cons (* -1 (car ls)) res ))
+         (negh (cdr ls) (cons (car ls) res)))))
+
+(define (neghead ls)
+  (if (null? ls)
+      '()
+      (if (> (car ls) 0)
+          (cons (* -1 (car ls)) (neghead (cdr ls)))
+          (cons (car ls) (neghead (cdr ls))))))
+
+
+;; Power Head
+(display "power head\n")
+(power-head 10 4)
+;; Power Tail
+(display "power tail\n")
+(power-tail 10 4)
+;; Third?
+(display "third\n")
+(third '(9 8 7 6))
+;; Just two?
+(display "Just two\n")
+(just-two? '(1))
+(just-two? '(1 2))
+(just-two? '(1 2 3))
+;; Returns 2 since its the number of 3s on the list
+(display "How many x\n")
+(how-many-x? '(1 2 3 3 4 4 5 5 5) 3)
+;; Returns true since all of them are 3s
+(display "all-x?\n")
+(all-x? '(3 3 3) 3)
+;; Returns false since the list is empty
+(all-x? '() 1)
+;; Returns false since the list is not of the same x
+(all-x? '(1 2 1) 1)
+;; Return 6 since its the 6th number of the list
+(display "get\n")
+(get '(1 2 3 4 5 5) 6)
+;; Returns the list without the 1 2 3 elemets
+(display "diff\n")
+(difference '(12 44 55 77 66 1 2 3 4) '(1 2 3))
+;; Returns the combination of both lists
+(display "append\n")
+(append2 '(1 2) '(2 3))
+;; Returns inverse list
+(display "invert\n")
+(invert '(a b c d))
+;; Returns -1 or  respectively
+(display "sign\n")
+(sign '(2 -4 -6))
+;; Return list of negatives
+(display "negatives\n")
+(neghead '(2 -4 6))

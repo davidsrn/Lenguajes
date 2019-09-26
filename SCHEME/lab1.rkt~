@@ -1,0 +1,33 @@
+#lang racket
+(define (tri-area base alt)
+  (/ (* base alt) 2))
+
+(define (a num)
+  (+ 10 (* num num)))
+
+(define (b num)
+  (+ 20 (* (* num num) (/ 1 2))))
+
+(define (c num)
+  (- 2 (/ 1 num)))
+
+(define (larger? num1 num2)
+  (> num1 num2))
+
+(define (four-a-c a c)
+  (* 4 a c))
+
+(define (solutions a b c)
+  (if (> (* b b) (* 4 a c)) "Two solutions"
+      (if (= (* b b) (* 4 a c)) "One Solution" "No solution")))
+
+(a 19)
+
+(b 19)
+
+(c 19)
+
+(solutions 1 0 -1)
+
+
+(solutions 2 4 2)

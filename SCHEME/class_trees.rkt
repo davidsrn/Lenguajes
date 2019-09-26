@@ -1,0 +1,70 @@
+#lang racket
+;; If the tree has subsequent nodes
+(define (leaf? tree)
+  (cond
+    [(empty? (cdr tree)) #t]
+    [else #f]))
+;; Just returns the list within the list
+(define (children tree)
+  (cdr tree))
+
+(define (count-leaves tree)
+  (if (leaf? tree)
+      1
+      (count-leaves-in-forest (children tree))))
+
+(define (count-leaves-in-forest  forest)
+  (if (null? forest)
+      0
+     (+ (count-leaves (car forest))
+        (count-leaves-in-forest (cdr forest)))))
+
+(define (add-leaves tree)
+  (if (leaf? tree)
+      (car tree)
+      (add-leaves-in-forest (children tree))))
+
+(define (add-leaves-in-forest  forest)
+  (if (null? forest)
+      0
+     (+ (add-leaves (car forest))
+        (add-leaves-in-forest (cdr forest)))))
+
+(define (add-all-leaves tree)
+  (if (leaf? tree)
+      (car tree)
+      (add-all-in-forest (children tree) (car tree))))
+
+(define (add-all-in-forest  forest acum)
+  (if (null? forest)
+      0
+     (+ acum (+ (add-all-leaves (car forest))
+        (add-all-in-forest (cdr forest)0)))))
+
+(define (max x y)
+  (if (> x y)
+      x
+      y))
+
+;; Estas no las termine
+(define (deep-count tree res)
+  (if(leaf? tree)
+     res
+     (deep-forest (cdr tree) (max res (add1 res)))))
+
+ (define (deep-forest  forest res)
+  (if (null? forest)
+      res
+      (max((deep-count (car forest) res)
+        (deep-forest (cdr forest) (max res (add1 res)))))))
+  
+
+(count-leaves '(a(b(c)(d)(e(f)(g)))))
+
+
+(add-leaves '(1(2(3)(4)(5(6)(7)))))
+
+
+(add-all-leaves '(1(2(3)(4)(5(6)(7)))))
+
+(deep-count  '(1(2(3)(4)(5(6)(7)))) 0)
