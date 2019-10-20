@@ -1,3 +1,4 @@
+// David Ramirez A01206423
 package Race;
 
 public class Race {
@@ -5,7 +6,7 @@ public class Race {
     Rabbit rob;
     Turtle tortu;
     int i;
-
+// Para iniciar la carrea se necesitan los ontricntes y el tamaño de la pista
     public Race(Rabbit rob, Turtle tortu, int i) {
         this.rob = rob;
         this.rob.setGoal(i);
@@ -15,6 +16,9 @@ public class Race {
         this.tortu.setCompetitor(rob);
         this.i = i;
     }
+
+//    La carrera inicia creando los threads para los contricantes
+//    Después se checa si alguno de ellos os han terminado para interrumpir al siguiente
 
     public void run(){
         Thread r = new Thread(rob);
@@ -45,6 +49,7 @@ public class Race {
                 break;
             }
         }
+//        Sólo parar alclarar que se terminó la carrera
         System.out.println("C'est finit");
     }
 }
