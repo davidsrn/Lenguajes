@@ -1,3 +1,4 @@
+// David Ramirez A01206423
 public class Doors implements Runnable {
 
     private Thread[] persons;
@@ -14,16 +15,21 @@ public class Doors implements Runnable {
     }
 //    En el arreglo de personas se inicializa la persona y se le mandan las puerats para que ella decida a donde ir
 //    Al iniciarse la persona esta comienza a trabajar
-    public void makePeople(){
-//        try {
+    private void makePeople(){
+        try {
             for (int i = 0; i < total_persons; i++) {
                 persons[i] = new Thread(new Person(allDoors));
                 persons[i].start();
 //                persons[i].join();
             }
-//        } catch (InterruptedException e){
+            for (int i = 0; i < total_persons; i++) {
+    //            persons[i] = new Thread(new Person(allDoors));
+    //                persons[i].start();
+                persons[i].join();
+            }
+        } catch (InterruptedException e){
 
-//        }
+        }
     }
 
 

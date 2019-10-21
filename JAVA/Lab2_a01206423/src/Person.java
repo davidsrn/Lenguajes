@@ -1,3 +1,4 @@
+// David Ramirez A01206423
 import java.util.Random;
 
 public class Person implements Runnable {
