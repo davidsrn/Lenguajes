@@ -1,8 +1,15 @@
 // David Ramirez A01206423
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 public class ImageProcessing extends RecursiveAction {
+    // Se quizo jugar y se perdio. Crei que podria cambiar mi examen para que diera un resultado como lo esperabael lab
+    // y no se pudo. Sgun yo esto cambia a una imagen en blanco y negro pero no usa threads
     // We use a Matrix to represent a Black and White Image
     private int[][] image;
     // The variables we use to know where we are located inside of the matrix and what are our limits
@@ -27,26 +34,20 @@ public class ImageProcessing extends RecursiveAction {
         if(end-start < THRESHOLD){
             // from our start to our end we start to iterate
             System.out.println("Reached threshold with start =  " + start + " end = " + end);
-            for(int i = start; i< end; i++){
-                // Since we are working with a matrix we have to start in the beginning of its first element
-                // and end when we reach its size or we will achieve something like =
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                1 1 1 1 1 1 0 0 0 0 0 0
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//                0 0 0 0 0 0 1 1 1 1 1 1
-//              And we don't want that it happened to me until i remembered what you said during class about matrices.
-                for(int j = 0; j< image.length; j++) {
-                    image[i][j] = image[i][j] + factor;
-                }
-            }
+//            for (int i = 0; i < result.getHeight(); i++) {
+//                for (int j = 0; j < result.getWidth(); j++) {
+//                    Color c = new Color(result.getRGB(j, i));
+//                    int red = (int) (c.getRed() * 0.299);
+//                    int green = (int) (c.getGreen() * 0.587);
+//                    int blue = (int) (c.getBlue() * 0.114);
+//                    Color newColor = new Color(
+//                            red + green + blue,
+//                            red + green + blue,
+//                            red + green + blue);
+//                    result.setRGB(j, i, newColor.getRGB());
+//                }
+//            }
+
         }else{
             // If the threshold wasn't reached yed we invoke two new ImageProcessing classes so we divide the work
             // separating the matrix and sending it to the created classes.
@@ -57,38 +58,56 @@ public class ImageProcessing extends RecursiveAction {
         }
     }
 
-    public static void main(String[] args){
+    public static void ctbaw(BufferedImage result) throws IOException {
+        for (int i = 0; i < result.getHeight(); i++) {
+            for (int j = 0; j < result.getWidth(); j++) {
+                Color c = new Color(result.getRGB(j, i));
+                int red = (int) (c.getRed() * 0.299);
+                int green = (int) (c.getGreen() * 0.587);
+                int blue = (int) (c.getBlue() * 0.114);
+                Color newColor = new Color(
+                        red + green + blue,
+                        red + green + blue,
+                        red + green + blue);
+                result.setRGB(j, i, newColor.getRGB());
+            }
+        }
+        File output = new File("img-g.png");
+        ImageIO.write(result, "png", output);
+    }
+
+    public static void main(String[] args) throws IOException {
         // The size of the image we want to create
-        int size = 100;
+        BufferedImage img= null;
+        try {
+            img = ImageIO.read(new File("594827.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedImage result = new BufferedImage(
+                img.getWidth(),
+                img.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+//        int image[][]= new int[img.getWidth()][img.getHeight()];
+        Graphics2D image = result.createGraphics();
+        ctbaw(result);
+        image.drawImage(img, 0, 0, Color.WHITE, null);
         // The factor we desire
-        int desired_factor = 10;
         // We start a 0 filled matrix to simulate a black image
-        int[][] image = new int[size][size];
         // We create the object with the information that we need and the desired factor
         // The factor being a positive number simulates that the image is getting brighter and viceversa
-        ImageProcessing ip = new ImageProcessing(image, 0, image.length, desired_factor);
+//        ImageProcessing ip = new ImageProcessing(image, 0, img.getWidth(), 0);
         // We create our thread pool that will handle the compute function
         ForkJoinPool pool = new ForkJoinPool();
         // We print our values before and after the changes had been made to see the result
-        for(int i = 0; i < image.length; i++) {
-            for(int j = 0; j < image[0].length; j++) {
-                System.out.print(image[i][j] + " ");
-            }
-            System.out.println("");
-        }
         // We invoke our pool with our object so it starts running
-        pool.invoke(ip);
+//        pool.invoke(ip);
         // When it's finished we shut it down
-        pool.shutdown();
+//        pool.shutdown();
 
         //We print our new matrix to see the results
-        for(int i = 0; i < image.length; i++) {
-            for(int j = 0; j < image[0].length; j++) {
-                System.out.print(image[i][j] + " ");
-            }
-            System.out.println("");
-        }
+
 
         System.out.println("Done");
-    }de
+    }
 }
